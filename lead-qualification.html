@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lead Qualification System | Khaled Otoom</title>
+    <meta name="description" content="A demonstration of an automated lead qualification, scoring, and routing system built for marketing agencies.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            900: '#0B0F19',
+                            800: '#111827',
+                            700: '#1F2937'
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0B0F19;
+            color: #f8fafc;
+        }
+        
+        .bg-grid {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), 
+                              linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #f8fafc, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .text-gradient-accent {
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(129, 140, 248, 0.3);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .workflow-box {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+            z-index: 10;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .workflow-box:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(129, 140, 248, 0.5);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .workflow-arrow {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(129, 140, 248, 0.5));
+            margin: 0 auto;
+        }
+        .workflow-arrow-split {
+            border-top: 2px solid rgba(129, 140, 248, 0.4);
+            border-left: 2px solid rgba(129, 140, 248, 0.4);
+            border-right: 2px solid rgba(129, 140, 248, 0.4);
+            height: 20px;
+            width: 50%;
+            margin: 0 auto;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(79, 70, 229, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-500/30 overflow-x-hidden">
+
+    <!-- Global Background Elements -->
+    <div class="fixed inset-0 bg-grid z-[-2] pointer-events-none opacity-40"></div>
+    <div class="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] bg-indigo-900/30 glow-blob"></div>
+    <div class="fixed bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-violet-900/20 glow-blob"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-navy-900/70 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold tracking-tight text-white hover:opacity-80 transition-opacity">Khaled<span class="text-indigo-400">Otoom</span></a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+                <a href="index.html#services" class="hover:text-white transition-colors">Services</a>
+                <a href="index.html#work" class="hover:text-white transition-colors text-white font-semibold">Work</a>
+                <a href="index.html#about" class="hover:text-white transition-colors">About</a>
+            </div>
+            <a href="mailto:vermora.automation@outlook.com?subject=AI%20Automation%20Workflow%20Audit&body=Hi%20Khaled%2C%0A%0AI'd%20like%20to%20request%20a%20free%20workflow%20audit.%0A%0ACompany%3A%0AWebsite%3A%0AWhat%20process%20would%20you%20like%20to%20improve%3F%0A%0ABest%2C%0A%5BYour%20Name%5D" class="hidden md:inline-flex px-5 py-2.5 bg-white text-navy-900 text-sm font-semibold rounded-full hover:bg-slate-200 transition-colors shadow-lg">Let's Talk</a>
+            <!-- Mobile menu button -->
+            <button class="md:hidden text-slate-300 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 1. Hero -->
+    <section class="relative pt-40 pb-20 lg:pt-48 lg:pb-32 flex flex-col items-center justify-center text-center">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 fade-in">
+            <a href="index.html#work" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-wide text-slate-400 hover:text-white transition-colors mb-8">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Back to Portfolio
+            </a>
+            <h1 class="text-4xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-white">
+                AI Lead Qualification & Routing System
+            </h1>
+            <p class="text-lg lg:text-xl text-slate-400 mb-10 leading-relaxed">
+                Automatically capture, qualify, score, and route inbound leads before your sales team wastes time on low-intent prospects.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://github.com/KhaledOtoom/ai-lead-qualification-routing" target="_blank" class="w-full sm:w-auto px-8 py-4 btn-primary text-white font-semibold rounded-full flex items-center justify-center gap-2">
+                    View Live Demo
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+                <a href="mailto:vermora.automation@outlook.com?subject=AI%20Automation%20Workflow%20Audit&body=Hi%20Khaled%2C%0A%0AI'd%20like%20to%20request%20a%20free%20workflow%20audit.%0A%0ACompany%3A%0AWebsite%3A%0AWhat%20process%20would%20you%20like%20to%20improve%3F%0A%0ABest%2C%0A%5BYour%20Name%5D" class="w-full sm:w-auto px-8 py-4 btn-secondary text-white font-semibold rounded-full">
+                    Let's Talk
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Problem & Solution -->
+    <section class="py-24 relative border-y border-white/5 bg-navy-800/30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 fade-in">
+                
+                <!-- Problem -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <div class="p-2 bg-red-500/10 rounded-lg"><svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+                        The Problem
+                    </h2>
+                    <ul class="space-y-4 text-slate-400 leading-relaxed text-lg">
+                        <li class="flex items-start gap-3"><span class="text-red-400 mt-1">✗</span> Leads arrive with completely different levels of intent and budget.</li>
+                        <li class="flex items-start gap-3"><span class="text-red-400 mt-1">✗</span> Sales teams waste valuable hours manually reviewing and filtering bad data.</li>
+                        <li class="flex items-start gap-3"><span class="text-red-400 mt-1">✗</span> High-intent prospects cool down while waiting for a response in a crowded inbox.</li>
+                        <li class="flex items-start gap-3"><span class="text-red-400 mt-1">✗</span> Businesses need automatic qualification and routing to scale operations efficiently.</li>
+                    </ul>
+                </div>
+
+                <!-- Solution -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <div class="p-2 bg-green-500/10 rounded-lg"><svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                        The Solution
+                    </h2>
+                    <ul class="space-y-4 text-slate-400 leading-relaxed">
+                        <li class="flex items-start gap-3"><span class="text-green-400 mt-1">✓</span> Captures incoming leads directly from websites, forms, or ad platforms.</li>
+                        <li class="flex items-start gap-3"><span class="text-green-400 mt-1">✓</span> Normalizes, validates, and strictly filters out duplicate records instantly.</li>
+                        <li class="flex items-start gap-3"><span class="text-green-400 mt-1">✓</span> Uses AI to analyze intent, budget, timeline, and service fit based on the request.</li>
+                        <li class="flex items-start gap-3"><span class="text-green-400 mt-1">✓</span> Assigns a 0–100 lead score and classifies them accurately (Qualified/Nurture).</li>
+                        <li class="flex items-start gap-3"><span class="text-green-400 mt-1">✓</span> Logs everything seamlessly into your centralized CRM or Google Sheets.</li>
+                        <li class="flex items-start gap-3"><span class="text-green-400 mt-1">✓</span> Sends an instant Telegram alert to sales the moment a high-value lead arrives.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. How It Works -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-white">How It Works</h2>
+                <p class="text-slate-400 text-lg">A fully automated, deterministic pipeline powered by AI.</p>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-10 max-w-4xl mx-auto fade-in flex flex-col items-center shadow-2xl relative">
+                <!-- Decorative header -->
+                <div class="absolute top-0 left-0 right-0 h-12 border-b border-white/5 bg-white/5 rounded-t-[2rem] flex items-center px-6 gap-2">
+                    <div class="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div class="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div class="w-3 h-3 rounded-full bg-slate-600"></div>
+                    <div class="mx-auto text-xs font-semibold text-slate-500 tracking-widest uppercase">System Architecture</div>
+                </div>
+
+                <div class="mt-12 w-full flex flex-col items-center">
+                    
+                    <div class="workflow-box w-full max-w-[320px]">
+                        <span class="text-sm text-slate-200">New Lead Captured</span>
+                    </div>
+                    
+                    <div class="workflow-arrow"></div>
+                    
+                    <div class="workflow-box w-full max-w-[320px] bg-slate-800/40">
+                        <span class="text-sm text-slate-300">Validation & Normalization</span>
+                    </div>
+                    
+                    <div class="workflow-arrow"></div>
+
+                    <div class="workflow-box w-full max-w-[320px] bg-slate-800/40">
+                        <span class="text-sm text-slate-300">Duplicate Check</span>
+                    </div>
+
+                    <div class="workflow-arrow"></div>
+                    
+                    <div class="workflow-box w-full max-w-[320px] bg-indigo-500/10 border-indigo-500/30">
+                        <div class="flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span class="text-sm font-semibold text-indigo-100">AI Qualification & Extraction</span>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-arrow"></div>
+                    
+                    <div class="workflow-box w-full max-w-[320px] bg-purple-500/10 border-purple-500/30">
+                        <span class="text-sm font-bold text-purple-200">Lead Score & Intent Assigned</span>
+                    </div>
+                    
+                    <div class="workflow-arrow" style="height: 25px;"></div>
+                    <div class="workflow-arrow-split" style="width: 70%; max-width: 400px; border-top-color: rgba(255,255,255,0.2); border-left-color: rgba(255,255,255,0.2); border-right-color: rgba(255,255,255,0.2);"></div>
+                    
+                    <div class="flex justify-between w-full max-w-[500px] gap-6 mt-0">
+                        <!-- Qualified Path -->
+                        <div class="flex flex-col items-center w-1/2">
+                            <div class="workflow-arrow" style="height: 15px; background: rgba(255,255,255,0.2);"></div>
+                            <div class="workflow-box w-full bg-emerald-500/10 border-emerald-500/30 text-emerald-400 text-xs py-3 tracking-wide uppercase font-bold mb-4">
+                                Qualified
+                            </div>
+                            <div class="workflow-box w-full border-slate-700/50 text-xs py-3 text-slate-300 mb-2 shadow-lg">
+                                Telegram Sales Alert
+                            </div>
+                            <div class="workflow-box w-full border-slate-700/50 text-xs py-3 text-slate-300 shadow-lg">
+                                CRM Log
+                            </div>
+                        </div>
+                        
+                        <!-- Nurture/Disqualified Path -->
+                        <div class="flex flex-col items-center w-1/2">
+                            <div class="workflow-arrow" style="height: 15px; background: rgba(255,255,255,0.2);"></div>
+                            <div class="workflow-box w-full bg-slate-800/50 border-slate-600/50 text-slate-400 text-xs py-3 tracking-wide uppercase font-bold mb-4">
+                                Nurture / Disqualified
+                            </div>
+                            <div class="workflow-box w-full border-slate-700/50 text-xs py-3 text-slate-300 shadow-lg">
+                                CRM Log (Silent)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Proof / Examples Section -->
+    <section class="py-24 bg-navy-800/20 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-white">Live System Output</h2>
+                <p class="text-slate-400 text-lg">See how the AI standardizes and scores incoming requests in real-time.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 fade-in">
+                
+                <!-- Hot Lead -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-t-emerald-500 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">Hot Lead</div>
+                    <div class="mb-6 mt-2">
+                        <h3 class="text-xl font-bold text-white mb-1">Acme Digital</h3>
+                        <p class="text-slate-400 text-sm">John Smith</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center bg-black/20 p-3 rounded-lg border border-white/5">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Lead Score</span>
+                            <span class="text-lg font-bold text-emerald-400">85/100</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-black/20 p-2 rounded border border-white/5 text-center">
+                                <span class="block text-[10px] text-slate-500 uppercase mb-1">Qualification</span>
+                                <span class="text-white font-semibold">Qualified</span>
+                            </div>
+                            <div class="bg-black/20 p-2 rounded border border-white/5 text-center">
+                                <span class="block text-[10px] text-slate-500 uppercase mb-1">Intent</span>
+                                <span class="text-white font-semibold">HIGH</span>
+                            </div>
+                        </div>
+                        <div class="text-sm space-y-2">
+                            <div class="flex gap-2"><span class="text-slate-500 w-16">Budget:</span> <span class="text-slate-200">$2k - $5k/mo</span></div>
+                            <div class="flex gap-2"><span class="text-slate-500 w-16">Timeline:</span> <span class="text-slate-200">Within 30 days</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-500/10 border border-indigo-500/20 p-4 rounded-xl text-sm">
+                        <span class="block text-[10px] font-bold text-indigo-400 uppercase tracking-wider mb-2">Recommended Action</span>
+                        <p class="text-indigo-100">Schedule discovery call immediately. Strong service fit and explicit budget.</p>
+                    </div>
+                </div>
+
+                <!-- Medium Lead -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-t-yellow-500 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-yellow-500/10 text-yellow-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">Medium Lead</div>
+                    <div class="mb-6 mt-2">
+                        <h3 class="text-xl font-bold text-white mb-1">TechFlow Solutions</h3>
+                        <p class="text-slate-400 text-sm">Sarah Jenkins</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center bg-black/20 p-3 rounded-lg border border-white/5">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Lead Score</span>
+                            <span class="text-lg font-bold text-yellow-400">65/100</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-black/20 p-2 rounded border border-white/5 text-center">
+                                <span class="block text-[10px] text-slate-500 uppercase mb-1">Qualification</span>
+                                <span class="text-white font-semibold">Qualified</span>
+                            </div>
+                            <div class="bg-black/20 p-2 rounded border border-white/5 text-center">
+                                <span class="block text-[10px] text-slate-500 uppercase mb-1">Intent</span>
+                                <span class="text-white font-semibold">MEDIUM</span>
+                            </div>
+                        </div>
+                        <div class="text-sm space-y-2">
+                            <div class="flex gap-2"><span class="text-slate-500 w-16">Budget:</span> <span class="text-slate-200">LOW</span></div>
+                            <div class="flex gap-2"><span class="text-slate-500 w-16">Timeline:</span> <span class="text-slate-200">HIGH (ASAP)</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-500/5 border border-indigo-500/10 p-4 rounded-xl text-sm">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Recommended Action</span>
+                        <p class="text-slate-300">Schedule call to clarify requirements. Good timeline but budget may be an issue.</p>
+                    </div>
+                </div>
+
+                <!-- Unqualified Lead -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-t-slate-500 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-slate-500/10 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">Unqualified</div>
+                    <div class="mb-6 mt-2">
+                        <h3 class="text-xl font-bold text-white mb-1">Buy Cheap SEO</h3>
+                        <p class="text-slate-400 text-sm">Marketing Bot</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center bg-black/20 p-3 rounded-lg border border-white/5">
+                            <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Lead Score</span>
+                            <span class="text-lg font-bold text-slate-400">10/100</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="bg-black/20 p-2 rounded border border-white/5 text-center">
+                                <span class="block text-[10px] text-slate-500 uppercase mb-1">Qualification</span>
+                                <span class="text-white font-semibold">Disqualified</span>
+                            </div>
+                            <div class="bg-black/20 p-2 rounded border border-white/5 text-center">
+                                <span class="block text-[10px] text-slate-500 uppercase mb-1">Intent</span>
+                                <span class="text-white font-semibold">LOW</span>
+                            </div>
+                        </div>
+                        <div class="text-sm space-y-2">
+                            <div class="flex gap-2"><span class="text-slate-500 w-16">Budget:</span> <span class="text-slate-200">N/A</span></div>
+                            <div class="flex gap-2"><span class="text-slate-500 w-16">Timeline:</span> <span class="text-slate-200">N/A</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-black/30 border border-white/5 p-4 rounded-xl text-sm">
+                        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Recommended Action</span>
+                        <p class="text-slate-400">Ignore. Vendor selling services rather than a prospective client.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Results / Business Value -->
+    <section class="py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-white">Business Value</h2>
+                <p class="text-slate-400 text-lg">Why agencies adopt automated qualification.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
+                <div class="bg-white/5 border border-white/5 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="text-indigo-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+                    <h3 class="text-lg font-bold text-white mb-2">Faster Lead Response</h3>
+                    <p class="text-sm text-slate-400">High-intent prospects are contacted in minutes, drastically increasing conversion rates.</p>
+                </div>
+                <div class="bg-white/5 border border-white/5 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="text-indigo-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div>
+                    <h3 class="text-lg font-bold text-white mb-2">Less Manual Qualification</h3>
+                    <p class="text-sm text-slate-400">Eliminate hours of manual CRM review and data entry for your sales development reps.</p>
+                </div>
+                <div class="bg-white/5 border border-white/5 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="text-indigo-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg></div>
+                    <h3 class="text-lg font-bold text-white mb-2">Consistent Lead Scoring</h3>
+                    <p class="text-sm text-slate-400">Every lead is judged instantly against the exact same rubric without human bias or fatigue.</p>
+                </div>
+                <div class="bg-white/5 border border-white/5 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="text-indigo-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg></div>
+                    <h3 class="text-lg font-bold text-white mb-2">Automatic Sales Routing</h3>
+                    <p class="text-sm text-slate-400">Leads go to the right place instantly. Qualified to Telegram, Nurture directly to CRM.</p>
+                </div>
+                <div class="bg-white/5 border border-white/5 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="text-indigo-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg></div>
+                    <h3 class="text-lg font-bold text-white mb-2">Centralized CRM Logging</h3>
+                    <p class="text-sm text-slate-400">A perfect, unified paper trail of every interaction, score, and AI reasoning saved automatically.</p>
+                </div>
+                <div class="bg-white/5 border border-white/5 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                    <div class="text-indigo-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></div>
+                    <h3 class="text-lg font-bold text-white mb-2">Better Pipeline Visibility</h3>
+                    <p class="text-sm text-slate-400">Clear view of inbound lead quality before they ever reach a discovery call.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Tech Stack Section -->
+    <section class="py-16 bg-black/40 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center fade-in">
+            <p class="text-sm font-semibold text-slate-500 uppercase tracking-widest mb-8">Powered By</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <span class="px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-slate-300 text-sm font-medium flex items-center gap-2">Webhook Integration</span>
+                <span class="px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-slate-300 text-sm font-medium flex items-center gap-2">n8n Orchestration</span>
+                <span class="px-5 py-2.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-bold flex items-center gap-2">Gemini AI Qualification</span>
+                <span class="px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-slate-300 text-sm font-medium flex items-center gap-2">Google Sheets CRM</span>
+                <span class="px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-slate-300 text-sm font-medium flex items-center gap-2">Telegram Alerts</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Final CTA -->
+    <section class="py-32 relative overflow-hidden text-center">
+        <div class="absolute inset-0 bg-gradient-to-b from-navy-900 to-black pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+        
+        <div class="max-w-3xl mx-auto px-6 lg:px-8 fade-in relative z-10">
+            <h2 class="text-4xl lg:text-6xl font-extrabold mb-6 tracking-tight text-white">Stop manually sorting leads.</h2>
+            <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto">Let your sales team focus on conversations that are actually worth having.</p>
+            <a href="mailto:vermora.automation@outlook.com?subject=AI%20Automation%20Workflow%20Audit&body=Hi%20Khaled%2C%0A%0AI'd%20like%20to%20request%20a%20free%20workflow%20audit.%0A%0ACompany%3A%0AWebsite%3A%0AWhat%20process%20would%20you%20like%20to%20improve%3F%0A%0ABest%2C%0A%5BYour%20Name%5D" class="inline-flex items-center justify-center px-10 py-5 btn-primary text-white font-bold rounded-full text-lg tracking-wide shadow-2xl">
+                Let's Talk
+            </a>
+            <div class="mt-12 flex items-center justify-center gap-6 text-sm font-medium text-slate-400">
+                <a href="mailto:vermora.automation@outlook.com" class="flex items-center gap-2 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    vermora.automation@outlook.com
+                </a>
+                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                <a href="https://github.com/KhaledOtoom" target="_blank" class="flex items-center gap-2 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-8 bg-black text-center text-slate-600 text-sm border-t border-white/5 relative z-10">
+        <p>&copy; 2026 Khaled Otoom. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
