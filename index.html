@@ -1,519 +1,155 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khaled Otoom | AI Automation for Marketing Agencies</title>
-    <meta name="description" content="AI Automation Developer building reliable systems to qualify leads, automate support, and streamline agency operations.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        navy: {
-                            900: '#0B0F19',
-                            800: '#111827',
-                            700: '#1F2937'
-                        }
-                    },
-                    backgroundImage: {
-                        'grid-pattern': "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)"
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #0B0F19;
-            color: #f8fafc;
-        }
-        
-        .bg-grid {
-            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px), 
-                              linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        .text-gradient {
-            background: linear-gradient(to right, #f8fafc, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .text-gradient-accent {
-            background: linear-gradient(to right, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            background: rgba(30, 41, 59, 0.6);
-            border-color: rgba(129, 140, 248, 0.3);
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Business Workflow Visualization */
-        .workflow-box {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            font-weight: 500;
-            position: relative;
-            z-index: 10;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-        .workflow-box:hover {
-            transform: translateY(-4px) scale(1.02);
-            border-color: rgba(129, 140, 248, 0.5);
-            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-        .workflow-arrow {
-            width: 2px;
-            height: 30px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(129, 140, 248, 0.5));
-            margin: 0 auto;
-        }
-        .workflow-arrow-split {
-            border-top: 2px solid rgba(129, 140, 248, 0.4);
-            border-left: 2px solid rgba(129, 140, 248, 0.4);
-            border-right: 2px solid rgba(129, 140, 248, 0.4);
-            height: 20px;
-            width: 50%;
-            margin: 0 auto;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-
-        /* Ambient Glows */
-        .glow-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: -1;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            box-shadow: 0 0 30px rgba(79, 70, 229, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-        
-        .btn-secondary {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d12">
+  <meta name="description" content="Vermora builds AI lead-to-booking systems that respond to inbound enquiries, qualify prospects, coordinate appointments and keep your team in control.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://khaledotoom.github.io/">
+  <meta property="og:title" content="Vermora — AI Lead-to-Booking Systems">
+  <meta property="og:description" content="Respond instantly. Qualify every lead. Follow up automatically. Book more appointments.">
+  <meta property="og:site_name" content="Vermora">
+  <link rel="canonical" href="https://khaledotoom.github.io/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23090d12'/%3E%3Cpath d='M15 17h9l8 22 8-22h9L36 48h-9z' fill='%237ce5c0'/%3E%3C/svg%3E">
+  <title>Vermora — AI Lead-to-Booking Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#090d12;--surface:#0e141b;--surface-2:#111a22;--line:rgba(190,215,226,.12);--muted:#a0adb6;--text:#eff5f4;--mint:#7ce5c0;--mint-dark:#15382f;--blue:#8eafff;--max:1160px;--sans:'DM Sans',sans-serif;--display:'Manrope',sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:94px}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 77% 2%,rgba(47,121,99,.14),transparent 35%),linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:auto,64px 64px,64px 64px;mask-image:linear-gradient(to bottom,black,transparent 78%)}
+    a{color:inherit;text-decoration:none}button{font:inherit}.wrap{width:min(var(--max),calc(100% - 48px));margin-inline:auto}.section{padding:112px 0;border-top:1px solid var(--line)}.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--mint);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}.eyebrow:before{content:"";width:20px;height:1px;background:currentColor}.display{font-family:var(--display);letter-spacing:-.055em;line-height:1.05}.section-heading{max-width:720px;margin-bottom:48px}.section-heading h2{font:700 clamp(34px,4vw,52px)/1.1 var(--display);letter-spacing:-.05em;margin:15px 0}.section-heading p{font-size:18px;color:var(--muted);max-width:620px;margin:0}.accent{color:var(--mint)}.muted{color:var(--muted)}
+    .header{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(190,215,226,.1);background:rgba(9,13,18,.84);backdrop-filter:blur(18px)}.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:25px}.brand{display:inline-flex;align-items:center;gap:11px;font:800 18px var(--display);letter-spacing:-.04em}.brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--mint);color:#09130f;font:800 20px var(--display);letter-spacing:-.1em;padding-right:2px}.nav-links{display:flex;align-items:center;gap:29px;color:#bcc6ca;font-size:13px;font-weight:600}.nav-links a:hover,.footer a:hover{color:var(--mint)}.nav-actions{display:flex;align-items:center;gap:12px}.menu-toggle{display:none}.button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;gap:10px;padding:0 21px;border:1px solid transparent;border-radius:8px;font-size:13px;font-weight:700;transition:transform .2s ease,background .2s ease,border-color .2s ease}.button:hover{transform:translateY(-2px)}.button-primary{background:var(--mint);color:#07130f;box-shadow:0 8px 30px rgba(77,204,156,.12)}.button-primary:hover{background:#9bf0d1}.button-quiet{border-color:var(--line);background:rgba(255,255,255,.025);color:var(--text)}.button-quiet:hover{border-color:rgba(124,229,192,.4);background:rgba(124,229,192,.06)}.button-arrow{font-size:18px;line-height:1}
+    .hero{position:relative;padding:88px 0 95px;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:65px}.hero-copy h1{font:700 clamp(48px,6.2vw,76px)/1.02 var(--display);letter-spacing:-.065em;margin:24px 0}.hero-copy h1 span{color:var(--mint)}.hero-copy>p{max-width:590px;color:#adb8bd;font-size:18px;line-height:1.7;margin:0 0 30px}.hero-actions{display:flex;flex-wrap:wrap;gap:12px}.micro-trust{display:flex;align-items:center;gap:10px;margin-top:29px;color:#89969d;font-size:12px}.micro-trust span:first-child{color:var(--mint)}
+    .product-window{position:relative;border:1px solid rgba(184,219,210,.16);border-radius:18px;background:linear-gradient(145deg,rgba(19,30,36,.98),rgba(11,17,23,.97));box-shadow:0 35px 100px rgba(0,0,0,.38);overflow:hidden}.window-top{display:flex;align-items:center;justify-content:space-between;padding:16px 19px;border-bottom:1px solid var(--line);color:#93a2a7;font-size:11px}.window-brand{display:flex;align-items:center;gap:9px;color:#e4edeb;font-weight:700}.window-brand .brand-mark{width:24px;height:24px;border-radius:7px;font-size:14px}.live-indicator{display:flex;align-items:center;gap:7px}.live-indicator i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}.window-body{padding:21px}.flow-topline{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;color:#97a6ac;font-size:11px}.flow-topline strong{color:#e0eae7;font-weight:600}.flow-stack{display:grid;gap:9px}.flow-row{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:12px;padding:12px;border:1px solid rgba(190,215,226,.1);border-radius:10px;background:rgba(255,255,255,.025)}.flow-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:rgba(124,229,192,.09);color:var(--mint);font-size:14px}.flow-row strong{display:block;font-size:12px;font-weight:600}.flow-row small{display:block;color:#839198;font-size:10px;margin-top:2px}.flow-state{font-size:10px;color:var(--mint)}.flow-connector{height:9px;width:1px;background:linear-gradient(var(--mint),rgba(124,229,192,.16));margin-left:29px}.window-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);margin-top:16px;padding-top:15px;color:#93a0a5;font-size:10px}.window-bottom strong{color:#d7e2df;font-weight:600}.source-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:19px}.source-pills span{font-size:10px;color:#a9b7ba;border:1px solid var(--line);border-radius:999px;padding:5px 9px}.hero-orbit{position:absolute;right:-130px;top:-100px;width:420px;height:420px;border:1px solid rgba(124,229,192,.07);border-radius:50%;pointer-events:none}.hero-orbit:after{content:"";position:absolute;inset:38px;border:1px solid rgba(124,229,192,.06);border-radius:50%}
+    .problem-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:72px;align-items:start}.problem-intro{position:sticky;top:115px}.problem-intro h2{font:700 clamp(34px,4vw,50px)/1.1 var(--display);letter-spacing:-.05em;margin:16px 0}.problem-intro p{color:var(--muted);font-size:17px}.problem-list{display:grid;gap:12px}.problem-item{display:grid;grid-template-columns:38px 1fr;gap:15px;padding:20px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018)}.problem-symbol{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:rgba(243,172,127,.08);color:#e7a981;font-size:15px}.problem-item h3{margin:1px 0 4px;font:600 15px var(--display)}.problem-item p{margin:0;color:var(--muted);font-size:13px}
+    .workflow-shell{padding:26px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,rgba(19,28,34,.82),rgba(12,18,24,.82))}.workflow-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:23px}.workflow-header strong{font:700 16px var(--display)}.workflow-header span{font-size:11px;color:var(--muted)}.workflow-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;position:relative}.workflow-step{position:relative;z-index:1;min-height:122px;padding:16px 12px;border:1px solid var(--line);border-radius:11px;background:#0d141a}.workflow-step:not(:last-child):after{content:"→";position:absolute;right:-12px;top:44px;color:var(--mint);font-size:14px}.step-num{color:var(--mint);font-size:10px;font-weight:700;letter-spacing:.1em}.workflow-step h3{font:600 13px/1.4 var(--display);margin:13px 0 5px}.workflow-step p{font-size:10px;line-height:1.45;color:#87959a;margin:0}.workflow-note{display:flex;align-items:center;gap:9px;color:#a8b5b8;font-size:12px;margin:18px 0 0}.workflow-note span{color:var(--mint)}
+    .capability-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.capability{min-height:176px;padding:21px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018)}.capability-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:rgba(124,229,192,.08);color:var(--mint);font-size:16px;margin-bottom:15px}.capability h3{font:600 15px var(--display);margin:0 0 7px}.capability p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+    .industry-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}.industry-copy h2{font:700 clamp(34px,4vw,50px)/1.1 var(--display);letter-spacing:-.05em;margin:16px 0}.industry-copy p{color:var(--muted);font-size:16px}.industry-copy .button{margin-top:12px}.industry-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.industry-card{min-height:130px;padding:18px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}.industry-card:first-child{border-color:rgba(124,229,192,.3);background:linear-gradient(140deg,rgba(124,229,192,.08),rgba(255,255,255,.015))}.industry-card h3{font:650 15px var(--display);margin:0 0 5px}.industry-card p{font-size:11px;color:var(--muted);margin:0}.industry-card:last-child{grid-column:span 2;min-height:95px}
+    .demo-section{background:linear-gradient(180deg,transparent,rgba(17,35,31,.17),transparent)}.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}.demo-copy h2{font:700 clamp(34px,4vw,50px)/1.1 var(--display);letter-spacing:-.05em;margin:16px 0}.demo-copy>p{color:var(--muted);font-size:16px}.demo-points{display:grid;gap:12px;margin-top:25px}.demo-point{display:flex;align-items:flex-start;gap:11px;color:#d3dedd;font-size:13px}.check{color:var(--mint);font-weight:700}.chat-card{max-width:470px;margin-left:auto;border:1px solid rgba(124,229,192,.2);border-radius:17px;background:#0d151a;overflow:hidden;box-shadow:0 25px 70px rgba(0,0,0,.24)}.chat-head{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;border-bottom:1px solid var(--line)}.chat-agent{display:flex;align-items:center;gap:10px}.agent-avatar{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--mint-dark);color:var(--mint);font-size:12px;font-weight:700}.chat-agent strong{display:block;font-size:12px}.chat-agent small{display:block;color:#86959a;font-size:10px}.demo-badge{padding:4px 8px;border:1px solid rgba(142,175,255,.2);border-radius:999px;color:#a9c2ff;font-size:9px;text-transform:uppercase;letter-spacing:.08em}.chat-body{padding:20px 17px 15px}.chat-time{text-align:center;color:#75848a;font-size:9px;margin-bottom:14px}.bubble{max-width:86%;margin-bottom:9px;padding:10px 12px;border-radius:11px;font-size:11px;line-height:1.55}.bubble.ai{background:#17252a;color:#e4ece9;border:1px solid rgba(190,215,226,.08);border-top-left-radius:3px}.bubble.lead{margin-left:auto;background:#17362e;color:#dff7ed;border-top-right-radius:3px}.chat-footer{border-top:1px solid var(--line);padding:12px 16px;color:#91a0a3;font-size:10px}.chat-footer strong{color:var(--mint);font-weight:600}.demo-disclaimer{margin-top:12px;color:#89969b;font-size:10px;text-align:right}
+    .reliability-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.reliability{padding:21px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018)}.reliability h3{font:600 14px var(--display);margin:0 0 7px}.reliability p{font-size:12px;color:var(--muted);margin:0}.reliability-icon{color:var(--mint);font-size:15px;margin-bottom:11px}
+    .process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}.process-card{position:relative;padding:20px 17px;border-top:1px solid rgba(124,229,192,.35);background:linear-gradient(180deg,rgba(124,229,192,.035),transparent);min-height:164px}.process-card .num{font:700 12px var(--display);color:var(--mint)}.process-card h3{font:650 15px var(--display);margin:12px 0 7px}.process-card p{font-size:11px;color:var(--muted);margin:0}
+    .faq-layout{display:grid;grid-template-columns:.72fr 1.28fr;gap:70px;align-items:start}.faq-intro h2{font:700 clamp(34px,4vw,48px)/1.1 var(--display);letter-spacing:-.05em;margin:16px 0}.faq-intro p{color:var(--muted)}.faq-list{border-top:1px solid var(--line)}details{border-bottom:1px solid var(--line)}summary{list-style:none;cursor:pointer;padding:19px 3px;font:600 14px var(--display);display:flex;justify-content:space-between;gap:16px;align-items:center}summary::-webkit-details-marker{display:none}summary:after{content:"+";color:var(--mint);font:400 20px var(--sans)}details[open] summary:after{content:"−"}details p{margin:-2px 30px 18px 3px;color:var(--muted);font-size:13px;line-height:1.7}
+    .final-cta{padding:92px 0;border-top:1px solid var(--line);background:radial-gradient(ellipse at 50% 100%,rgba(38,129,100,.18),transparent 58%);text-align:center}.final-cta h2{max-width:760px;margin:16px auto;font:700 clamp(38px,5.4vw,62px)/1.05 var(--display);letter-spacing:-.06em}.final-cta p{max-width:590px;margin:0 auto 25px;color:var(--muted);font-size:16px}.footer{border-top:1px solid var(--line);padding:29px 0;color:#8c999e;font-size:12px}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}.footer-brand{display:flex;align-items:center;gap:10px;color:#e5eeec;font:700 13px var(--display)}.footer-brand .brand-mark{width:27px;height:27px;border-radius:8px;font-size:15px}.footer-links{display:flex;gap:19px;flex-wrap:wrap}.footer-copy{margin:0}
+    .reveal{opacity:1;transform:none}.js-motion .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}.js-motion .reveal.is-visible{opacity:1;transform:translateY(0)}:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+    @media(max-width:960px){.nav-links{gap:17px}.nav-actions .button{padding:0 15px}.hero-grid{gap:35px}.hero-copy h1{font-size:58px}.workflow-steps{grid-template-columns:repeat(3,1fr)}.workflow-step:nth-child(3):after{display:none}.capability-grid{grid-template-columns:repeat(2,1fr)}.problem-grid,.industry-layout,.faq-layout{gap:40px}}
+    @media(max-width:720px){.wrap{width:min(var(--max),calc(100% - 36px))}.section{padding:78px 0}.nav{height:66px}.nav-actions>.button{display:none}.menu-toggle{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--text);cursor:pointer}.nav-links{display:none;position:absolute;top:66px;left:0;right:0;padding:14px 20px 20px;background:#0b1116;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:0}.nav-links.open{display:flex}.nav-links a{padding:12px 5px;border-bottom:1px solid rgba(190,215,226,.07)}.hero{padding:65px 0 72px}.hero-grid,.problem-grid,.industry-layout,.demo-grid,.faq-layout{grid-template-columns:1fr;gap:36px}.hero-copy h1{font-size:clamp(46px,12vw,62px)}.hero-copy>p{font-size:16px}.product-window{max-width:540px}.problem-intro{position:static}.workflow-shell{padding:17px}.workflow-steps{grid-template-columns:repeat(2,1fr)}.workflow-step:nth-child(3):after{display:block}.workflow-step:nth-child(even):after{display:none}.workflow-header{align-items:flex-start;flex-direction:column;gap:4px}.industry-grid{grid-template-columns:repeat(2,1fr)}.chat-card{margin:0 auto}.demo-disclaimer{text-align:left}.reliability-grid{grid-template-columns:repeat(2,1fr)}.process-grid{grid-template-columns:repeat(2,1fr);gap:7px}.process-card:last-child{grid-column:span 2;min-height:auto}.footer-inner{align-items:flex-start;flex-direction:column}.footer-links{gap:14px}}
+    @media(max-width:440px){.wrap{width:calc(100% - 30px)}.hero-actions{align-items:stretch;flex-direction:column}.hero-actions .button{width:100%}.micro-trust{align-items:flex-start}.window-body{padding:15px}.flow-row{grid-template-columns:32px 1fr auto;padding:10px}.flow-icon{width:30px;height:30px}.workflow-steps{gap:7px}.workflow-step{min-height:120px;padding:13px 10px}.workflow-step h3{font-size:12px}.capability-grid,.reliability-grid{grid-template-columns:1fr}.capability{min-height:auto}.industry-grid{grid-template-columns:1fr}.industry-card,.industry-card:last-child{grid-column:auto;min-height:auto}.industry-card{padding:15px}.process-grid{grid-template-columns:1fr}.process-card,.process-card:last-child{grid-column:auto;min-height:auto;padding:16px}.section-heading p{font-size:16px}.final-cta{padding:76px 0}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.js-motion .reveal{opacity:1;transform:none}}
+  </style>
 </head>
-<body class="antialiased selection:bg-indigo-500/30 overflow-x-hidden">
-
-    <!-- Global Background Elements -->
-    <div class="fixed inset-0 bg-grid z-[-2] pointer-events-none opacity-40"></div>
-    <div class="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] bg-indigo-900/30 glow-blob"></div>
-    <div class="fixed bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-violet-900/20 glow-blob"></div>
-
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-navy-900/70 backdrop-blur-xl border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="text-xl font-bold tracking-tight text-white">Khaled<span class="text-indigo-400">Otoom</span></a>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="#services" class="hover:text-white transition-colors">Services</a>
-                <a href="#work" class="hover:text-white transition-colors">Work</a>
-                <a href="#about" class="hover:text-white transition-colors">About</a>
-            </div>
-            <a href="mailto:vermora.automation@outlook.com?subject=AI%20Automation%20Workflow%20Audit&body=Hi%20Khaled%2C%0A%0AI'd%20like%20to%20request%20a%20free%20workflow%20audit.%0A%0ACompany%3A%0AWebsite%3A%0AWhat%20process%20would%20you%20like%20to%20improve%3F%0A%0ABest%2C%0A%5BYour%20Name%5D" class="hidden md:inline-flex px-5 py-2.5 bg-white text-navy-900 text-sm font-semibold rounded-full hover:bg-slate-200 transition-colors shadow-lg">Let's Talk</a>
-            <!-- Mobile menu button -->
-            <button class="md:hidden text-slate-300 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
+<body>
+  <header class="header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Vermora home"><span class="brand-mark" aria-hidden="true">V</span><span>vermora</span></a>
+      <div class="nav-links" id="nav-links">
+        <a href="#how-it-works">How it works</a><a href="#what-it-handles">What it handles</a><a href="#industries">Industries</a><a href="#demo">Demo</a><a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-actions"><a class="button button-primary" href="mailto:vermora.automation@outlook.com?subject=Vermora%20Lead-to-Booking%20Demo">Book a demo <span class="button-arrow" aria-hidden="true">↗</span></a><button class="menu-toggle" type="button" aria-label="Open navigation" aria-controls="nav-links" aria-expanded="false"><span aria-hidden="true">☰</span></button></div>
     </nav>
-
-    <!-- 1. Hero -->
-    <section class="relative pt-32 pb-20 lg:pt-56 lg:pb-40 flex flex-col justify-center min-h-[95vh]">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
-        
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center fade-in">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold tracking-widest text-indigo-300 uppercase mb-8 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
-                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-                AI AUTOMATION FOR MARKETING AGENCIES
-            </div>
-            <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1] max-w-5xl mx-auto text-gradient">
-                Turn More Inbound Leads<br>Into Sales Opportunities.
-            </h1>
-            <p class="text-lg lg:text-xl text-slate-400 mb-10 max-w-3xl mx-auto leading-relaxed">
-                I build AI-powered systems that automatically qualify, score, and route your agency's inbound leads — so your sales team can stop sifting through noise and focus entirely on the prospects most likely to close.
-            </p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="mailto:vermora.automation@outlook.com?subject=AI%20Automation%20Workflow%20Audit&body=Hi%20Khaled%2C%0A%0AI'd%20like%20to%20request%20a%20free%20workflow%20audit.%0A%0ACompany%3A%0AWebsite%3A%0AWhat%20process%20would%20you%20like%20to%20improve%3F%0A%0ABest%2C%0A%5BYour%20Name%5D" class="w-full sm:w-auto px-8 py-4 btn-primary text-white font-semibold rounded-full">
-                    Get a Free Workflow Audit
-                </a>
-                <a href="#work" class="w-full sm:w-auto px-8 py-4 btn-secondary text-white font-semibold rounded-full">
-                    View My Work
-                </a>
-            </div>
+  </header>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-orbit" aria-hidden="true"></div>
+      <div class="hero-grid wrap">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Vermora · AI revenue systems</span>
+          <h1>From first enquiry to <span>booked appointment.</span></h1>
+          <p>Respond instantly. Qualify every lead. Follow up automatically. Book more appointments. Vermora builds AI systems that turn inbound enquiries into qualified conversations, with your team in control.</p>
+          <div class="hero-actions"><a class="button button-primary" href="mailto:vermora.automation@outlook.com?subject=Vermora%20Lead-to-Booking%20Demo">Book a demo <span class="button-arrow" aria-hidden="true">↗</span></a><a class="button button-quiet" href="#how-it-works">See how it works <span class="button-arrow" aria-hidden="true">↓</span></a></div>
+          <div class="micro-trust"><span aria-hidden="true">✳</span><span>Built around your process, channels and booking rules.</span></div>
         </div>
-    </section>
-
-    <!-- 2. What I Build -->
-    <section id="services" class="py-24 relative border-y border-white/5 bg-navy-800/30">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-            <div class="max-w-2xl fade-in">
-                <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-white">Automate the Work Behind Your Growth</h2>
-                <p class="text-slate-400 text-lg mb-16">Stop losing margin to manual repetitive tasks. I design systems that take over the heavy lifting of lead triage, support routing, and data entry, ensuring nothing slips through the cracks.</p>
+        <div class="product-window reveal" aria-label="Illustration of the AI lead-to-booking workflow">
+          <div class="window-top"><div class="window-brand"><span class="brand-mark" aria-hidden="true">V</span> Lead-to-Booking System</div><span class="live-indicator"><i></i> Workflow preview</span></div>
+          <div class="window-body"><div class="flow-topline"><strong>One enquiry. A clear next step.</strong><span>Example flow</span></div>
+            <div class="flow-stack">
+              <div class="flow-row"><span class="flow-icon" aria-hidden="true">↗</span><div><strong>New enquiry received</strong><small>Website form · property request</small></div><span class="flow-state">Captured</span></div><div class="flow-connector" aria-hidden="true"></div>
+              <div class="flow-row"><span class="flow-icon" aria-hidden="true">✳</span><div><strong>Helpful first response</strong><small>AI replies in the right channel</small></div><span class="flow-state">Responded</span></div><div class="flow-connector" aria-hidden="true"></div>
+              <div class="flow-row"><span class="flow-icon" aria-hidden="true">◎</span><div><strong>Needs and timing clarified</strong><small>Answers captured for your team</small></div><span class="flow-state">Qualified</span></div><div class="flow-connector" aria-hidden="true"></div>
+              <div class="flow-row"><span class="flow-icon" aria-hidden="true">▦</span><div><strong>Viewing or call arranged</strong><small>Calendar and CRM updated</small></div><span class="flow-state">Next step set</span></div>
             </div>
-            <div class="grid md:grid-cols-3 gap-8 fade-in">
-                <div class="p-8 rounded-2xl glass-card">
-                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 rounded-xl flex items-center justify-center mb-6 text-indigo-400 shadow-inner">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3 text-white">Seamless Data Flow</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Leads and information move automatically between your website, CRM, and team communication channels with zero manual data entry.</p>
-                </div>
-                <div class="p-8 rounded-2xl glass-card">
-                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 rounded-xl flex items-center justify-center mb-6 text-indigo-400 shadow-inner">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3 text-white">Intelligent Decisioning</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">AI acts as your dedicated assistant, reviewing incoming inquiries, scoring their value, and deciding who needs to see them immediately.</p>
-                </div>
-                <div class="p-8 rounded-2xl glass-card">
-                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 rounded-xl flex items-center justify-center mb-6 text-indigo-400 shadow-inner">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-3 text-white">Built for Reliability</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Automation is only useful if you can trust it. I build safeguards to catch duplicates, validate AI answers, and alert a human when things are uncertain.</p>
-                </div>
-            </div>
+            <div class="window-bottom"><span>Human handoff stays available</span><strong>Team in control <span aria-hidden="true">↗</span></strong></div>
+            <div class="source-pills" aria-label="Example lead sources"><span>Website</span><span>Property portals</span><span>Ads</span><span>WhatsApp</span></div>
+          </div>
         </div>
+      </div>
     </section>
-
-    <!-- 3. Featured Project -->
-    <section id="work" class="py-24 relative overflow-hidden">
-        <div class="absolute top-1/4 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="mb-16 fade-in text-center lg:text-left">
-                <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-white">Featured Work</h2>
-                <p class="text-slate-400 text-lg">Production-ready systems driving business outcomes.</p>
-            </div>
-
-            <div class="glass-card rounded-[2rem] p-8 lg:p-14 fade-in relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5"></div>
-                
-                <div class="grid lg:grid-cols-2 gap-16 items-center relative z-10">
-                    <div>
-                        <div class="inline-block px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-bold tracking-wider rounded-full mb-8 shadow-sm">FEATURED OFFER</div>
-                        <h3 class="text-3xl lg:text-4xl font-extrabold mb-10 text-white tracking-tight">AI Lead Qualification & Routing System</h3>
-                        
-                        <div class="space-y-8">
-                            <div class="bg-navy-900/40 rounded-xl p-6 border border-white/5">
-                                <h4 class="text-white font-semibold mb-3 flex items-center gap-3">
-                                    <div class="p-1.5 bg-red-500/10 rounded-lg"><svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-                                    The Problem
-                                </h4>
-                                <p class="text-sm leading-relaxed text-slate-400">Your marketing drives inbound leads, but they arrive with varying intent and budgets. Your sales team wastes hours manually reviewing and filtering them, causing the hottest prospects to cool down before they get a response.</p>
-                            </div>
-                            
-                            <div class="bg-navy-900/40 rounded-xl p-6 border border-white/5">
-                                <h4 class="text-white font-semibold mb-3 flex items-center gap-3">
-                                    <div class="p-1.5 bg-green-500/10 rounded-lg"><svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-                                    The Solution
-                                </h4>
-                                <p class="text-sm leading-relaxed text-slate-400">An intelligent routing system that catches leads the second they arrive, evaluates them exactly like your best salesperson would, and instantly hands the most valuable opportunities to your team.</p>
-                            </div>
-
-                            <div class="px-2">
-                                <h4 class="text-white font-semibold mb-4 flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                    How It Works
-                                </h4>
-                                <ul class="list-none text-sm leading-relaxed text-slate-400 space-y-3">
-                                    <li class="flex gap-3"><span class="text-indigo-400 font-bold">1.</span> <span>Captures incoming leads from your website or ad platforms.</span></li>
-                                    <li class="flex gap-3"><span class="text-indigo-400 font-bold">2.</span> <span>AI analyzes the prospect's budget, timeline, and request.</span></li>
-                                    <li class="flex gap-3"><span class="text-indigo-400 font-bold">3.</span> <span>Assigns a 0-100 Lead Score based on your ideal client profile.</span></li>
-                                    <li class="flex gap-3"><span class="text-indigo-400 font-bold">4.</span> <span>Sorts leads into "Qualified" (ready to close) or "Nurture" (not quite ready).</span></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="px-2">
-                                <h4 class="text-white font-semibold mb-4 flex items-center gap-2">
-                                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                                    What You Get
-                                </h4>
-                                <p class="text-sm leading-relaxed text-slate-400">Your sales team gets an instant mobile alert the moment a qualified prospect reaches out, complete with their score and AI summary. Less time sifting, more time selling.</p>
-                            </div>
-                            <div class="pt-4">
-                                <a href="lead-qualification.html" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 font-semibold rounded-full hover:bg-indigo-500/20 hover:text-white transition-colors">
-                                    View Full Case Study & Live Demo
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Premium Business Workflow Visualization -->
-                    <div class="bg-navy-900/60 rounded-[1.5rem] border border-slate-700/50 p-10 relative flex flex-col items-center shadow-2xl backdrop-blur-xl">
-                        <!-- Interface Header -->
-                        <div class="absolute top-0 left-0 right-0 h-12 border-b border-white/5 bg-white/5 rounded-t-[1.5rem] flex items-center px-4 gap-2">
-                            <div class="w-3 h-3 rounded-full bg-slate-600"></div>
-                            <div class="w-3 h-3 rounded-full bg-slate-600"></div>
-                            <div class="w-3 h-3 rounded-full bg-slate-600"></div>
-                            <div class="mx-auto text-xs font-semibold text-slate-500 tracking-widest uppercase">Lead Routing Engine</div>
-                        </div>
-                        
-                        <div class="mt-8 w-full flex flex-col items-center">
-                            <div class="workflow-box w-full max-w-[280px]">
-                                <div class="flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                    <span class="text-sm text-slate-200">New Inbound Lead</span>
-                                </div>
-                            </div>
-                            
-                            <div class="workflow-arrow"></div>
-                            
-                            <div class="workflow-box w-full max-w-[280px] bg-indigo-500/10 border-indigo-500/30">
-                                <div class="flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                    <span class="text-sm text-indigo-100">AI Context Analysis</span>
-                                </div>
-                            </div>
-                            
-                            <div class="workflow-arrow"></div>
-                            
-                            <div class="workflow-box w-full max-w-[280px] bg-purple-500/10 border-purple-500/30">
-                                <div class="flex items-center justify-center gap-2">
-                                    <span class="text-sm font-bold text-purple-400">92/100</span>
-                                    <span class="text-sm text-purple-100">Lead Score Assigned</span>
-                                </div>
-                            </div>
-                            
-                            <div class="workflow-arrow" style="height: 20px;"></div>
-                            <div class="workflow-arrow-split"></div>
-                            
-                            <div class="flex justify-between w-full max-w-[340px] gap-4">
-                                <div class="flex flex-col items-center w-1/2">
-                                    <div class="workflow-arrow" style="height: 10px;"></div>
-                                    <div class="workflow-box w-full bg-emerald-500/10 border-emerald-500/30 text-emerald-400 text-xs py-3 tracking-wide uppercase font-bold">
-                                        Qualified
-                                    </div>
-                                    <div class="workflow-arrow" style="height: 20px;"></div>
-                                    <div class="workflow-box w-full border-slate-700/50 text-xs py-3 text-slate-300">
-                                        Instant Sales Alert
-                                    </div>
-                                </div>
-                                
-                                <div class="flex flex-col items-center w-1/2">
-                                    <div class="workflow-arrow" style="height: 10px;"></div>
-                                    <div class="workflow-box w-full bg-slate-800/50 border-slate-600/50 text-slate-400 text-xs py-3 tracking-wide uppercase font-bold">
-                                        Nurture
-                                    </div>
-                                    <div class="workflow-arrow" style="height: 20px;"></div>
-                                    <div class="workflow-box w-full border-slate-700/50 text-xs py-3 text-slate-300">
-                                        CRM Tracking Log
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="section" aria-labelledby="problem-title">
+      <div class="problem-grid wrap">
+        <div class="problem-intro reveal"><span class="eyebrow">The gap after the click</span><h2 id="problem-title">Every delay adds friction to a good enquiry.</h2><p>Leads arrive across forms, ads, portals and chat. When the next step depends on someone noticing and remembering, opportunities can lose momentum.</p></div>
+        <div class="problem-list reveal">
+          <article class="problem-item"><span class="problem-symbol" aria-hidden="true">◷</span><div><h3>Responses wait in a queue</h3><p>Enquiries come in after hours or while your team is busy with existing clients.</p></div></article>
+          <article class="problem-item"><span class="problem-symbol" aria-hidden="true">⌁</span><div><h3>Context gets scattered</h3><p>Source, preferences and conversation history live across inboxes, forms and CRM records.</p></div></article>
+          <article class="problem-item"><span class="problem-symbol" aria-hidden="true">↻</span><div><h3>Follow-up is easy to miss</h3><p>Without a clear reminder and ownership, the next message slips down the list.</p></div></article>
+          <article class="problem-item"><span class="problem-symbol" aria-hidden="true">⇧</span><div><h3>People step in without a handoff</h3><p>Your team needs the conversation and a useful summary—not another disconnected notification.</p></div></article>
         </div>
+      </div>
     </section>
-
-    <!-- 4. Other Projects -->
-    <section class="py-12 pb-24 relative">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <h3 class="text-xl font-bold mb-10 text-center text-slate-300 tracking-tight">Additional Automation Solutions</h3>
-            <div class="grid md:grid-cols-2 gap-8 fade-in">
-                
-                <!-- Project 2 -->
-                <div class="p-10 rounded-[1.5rem] glass-card flex flex-col group">
-                    <div class="w-10 h-10 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-6 text-blue-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">AI Customer Support Automation</h3>
-                    <p class="text-slate-400 text-sm mb-8 leading-relaxed flex-grow">
-                        Never let an urgent customer issue get buried in a crowded inbox. This system acts as a virtual dispatcher for your client emails.
-                    </p>
-                    <ul class="text-sm text-slate-300 space-y-3">
-                        <li class="flex items-start bg-white/5 p-3 rounded-lg border border-white/5">
-                            <span class="text-blue-400 mr-3">✦</span> Automatically reads and categorizes incoming emails.
-                        </li>
-                        <li class="flex items-start bg-white/5 p-3 rounded-lg border border-white/5">
-                            <span class="text-blue-400 mr-3">✦</span> Instantly alerts your team to urgent client requests.
-                        </li>
-                        <li class="flex items-start bg-white/5 p-3 rounded-lg border border-white/5">
-                            <span class="text-blue-400 mr-3">✦</span> Prepares accurate draft replies for routine questions.
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="p-10 rounded-[1.5rem] glass-card flex flex-col group">
-                    <div class="w-10 h-10 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-6 text-purple-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-purple-300 transition-colors">Automated Document Processing</h3>
-                    <p class="text-slate-400 text-sm mb-8 leading-relaxed flex-grow">
-                        Eliminate manual data entry from invoices and contracts. This workflow extracts the exact information you need to keep operations moving.
-                    </p>
-                    <ul class="text-sm text-slate-300 space-y-3">
-                        <li class="flex items-start bg-white/5 p-3 rounded-lg border border-white/5">
-                            <span class="text-purple-400 mr-3">✦</span> Reads messy documents to find key business data.
-                        </li>
-                        <li class="flex items-start bg-white/5 p-3 rounded-lg border border-white/5">
-                            <span class="text-purple-400 mr-3">✦</span> Logs amounts and statuses directly into tracking systems.
-                        </li>
-                        <li class="flex items-start bg-white/5 p-3 rounded-lg border border-white/5">
-                            <span class="text-purple-400 mr-3">✦</span> Flags unclear documents for a human to double-check.
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
+    <section class="section" id="how-it-works" aria-labelledby="workflow-title">
+      <div class="wrap"><div class="section-heading reveal"><span class="eyebrow">How it works</span><h2 id="workflow-title">One connected path from lead to next step.</h2><p>The system meets enquiries where they arrive, keeps the conversation moving, and brings a person in whenever the situation calls for it.</p></div>
+        <div class="workflow-shell reveal"><div class="workflow-header"><strong>A lead-to-booking workflow</strong><span>Configured around your tools and process</span></div><div class="workflow-steps">
+          <article class="workflow-step"><span class="step-num">01 / INTAKE</span><h3>New lead</h3><p>Capture and check a new enquiry.</p></article><article class="workflow-step"><span class="step-num">02 / RESPONSE</span><h3>Instant AI response</h3><p>Acknowledge and start a conversation.</p></article><article class="workflow-step"><span class="step-num">03 / DISCOVERY</span><h3>Qualification</h3><p>Understand needs, timing and fit.</p></article><article class="workflow-step"><span class="step-num">04 / ACTION</span><h3>Appointment</h3><p>Offer a suitable next step or slot.</p></article><article class="workflow-step"><span class="step-num">05 / CONTEXT</span><h3>CRM / handoff</h3><p>Keep your team informed and in control.</p></article><article class="workflow-step"><span class="step-num">06 / CONTINUITY</span><h3>Follow-up</h3><p>Send agreed reminders and follow-ups.</p></article>
+        </div><p class="workflow-note"><span aria-hidden="true">✳</span> Unclear, sensitive or urgent conversations can be routed to a human.</p></div>
+      </div>
+    </section>
+    <section class="section" id="what-it-handles" aria-labelledby="handles-title">
+      <div class="wrap"><div class="section-heading reveal"><span class="eyebrow">What the AI handles</span><h2 id="handles-title">Useful conversations, with clear boundaries.</h2><p>Automate the repeatable parts of lead handling while keeping escalation, preferences and human judgement in the flow.</p></div>
+        <div class="capability-grid">
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">↗</span><h3>Fast first response</h3><p>Acknowledge a new enquiry and ask a relevant next question.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">↔</span><h3>Two-way conversation</h3><p>Understand replies naturally across supported channels.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">?</span><h3>Approved FAQs</h3><p>Answer routine questions using information you provide.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">◎</span><h3>Lead qualification</h3><p>Gather the details that matter to your team and process.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">▦</span><h3>Booking coordination</h3><p>Offer a call, viewing or appointment using configured rules.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">▤</span><h3>CRM context</h3><p>Pass lead details and a conversation summary into connected tools.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">◷</span><h3>Reminders and follow-up</h3><p>Continue agreed outreach and appointment reminders.</p></article>
+          <article class="capability reveal"><span class="capability-icon" aria-hidden="true">⏸</span><h3>Opt-out and takeover</h3><p>Respect STOP requests and pause automation when a person takes over.</p></article>
         </div>
+      </div>
     </section>
-
-    <!-- 5. How I Work & 6. About -->
-    <section id="about" class="py-32 relative border-t border-white/5 bg-navy-800/40">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 fade-in">
-                <div>
-                    <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">About Me</h2>
-                    <p class="text-2xl font-bold text-gradient-accent mb-8 leading-tight">
-                        "I don't just prompt AI; I build the infrastructure around it."
-                    </p>
-                    <div class="space-y-6 text-slate-400 leading-relaxed text-lg">
-                        <p>
-                            I'm Khaled Otoom, an AI Automation Specialist focused on helping marketing and digital agencies work smarter. I don't build tech for the sake of tech—I build practical, reliable systems that solve actual business bottlenecks.
-                        </p>
-                        <p>
-                            My goal is to give your team their time back. Whether it's sorting leads, routing support tickets, or handling data entry, I ensure that automation acts as a reliable extension of your operations, turning manual chaos into structured growth.
-                        </p>
-                    </div>
-                </div>
-                
-                <div>
-                    <h2 class="text-3xl lg:text-4xl font-bold mb-10 text-white">My Approach</h2>
-                    <div class="space-y-10">
-                        <div class="flex gap-6 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-lg group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all shadow-inner">1</div>
-                            <div>
-                                <h4 class="text-xl text-white font-bold mb-2 group-hover:text-indigo-300 transition-colors">Process First, AI Second</h4>
-                                <p class="text-slate-400 leading-relaxed">We start by deeply understanding how your business operates today. I map out the exact steps your team takes before we apply any automation, ensuring the solution perfectly fits your reality.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-lg group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all shadow-inner">2</div>
-                            <div>
-                                <h4 class="text-xl text-white font-bold mb-2 group-hover:text-indigo-300 transition-colors">Reliable Automation</h4>
-                                <p class="text-slate-400 leading-relaxed">A system that breaks silently is worse than no system at all. I build in strict rules and duplicate protections so you can trust the workflow day in and day out without micromanaging it.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-lg group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all shadow-inner">3</div>
-                            <div>
-                                <h4 class="text-xl text-white font-bold mb-2 group-hover:text-indigo-300 transition-colors">Human Review When Uncertain</h4>
-                                <p class="text-slate-400 leading-relaxed">AI shouldn't make final decisions when it isn't sure. I design smart routing paths that automatically flag unclear leads or documents to your team for human review.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="section" id="industries" aria-labelledby="industry-title">
+      <div class="industry-layout wrap">
+        <div class="industry-copy reveal"><span class="eyebrow">Built for your business</span><h2 id="industry-title">A configurable system. A conversation that fits.</h2><p>Start with real estate, then adapt the qualification questions, FAQs, booking rules and integrations to the way your business works.</p><p>Channel and system availability depends on your current tools and what we confirm during discovery.</p><a class="button button-quiet" href="mailto:vermora.automation@outlook.com?subject=Configure%20a%20Lead-to-Booking%20System">Discuss your workflow <span class="button-arrow" aria-hidden="true">↗</span></a></div>
+        <div class="industry-grid reveal"><article class="industry-card"><h3>Real estate</h3><p>Property needs, budget, preferred area and viewing requests.</p></article><article class="industry-card"><h3>Clinics</h3><p>Service interest, availability and appointment requests.</p></article><article class="industry-card"><h3>Home services</h3><p>Job type, location, urgency and estimate requests.</p></article><article class="industry-card"><h3>Agencies</h3><p>Enquiry type, goals, fit and consultation booking.</p></article><article class="industry-card"><h3>Professional services</h3><p>Intake questions, service routing and an appropriate first conversation.</p></article></div>
+      </div>
     </section>
-
-    <!-- 7. Contact -->
-    <section id="contact" class="py-40 relative overflow-hidden text-center border-t border-white/5">
-        <div class="absolute inset-0 bg-gradient-to-b from-navy-900 to-black pointer-events-none"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
-        
-        <div class="max-w-3xl mx-auto px-6 lg:px-8 fade-in relative z-10">
-            <h2 class="text-4xl lg:text-6xl font-extrabold mb-6 tracking-tight text-white">Have Leads Coming In?<br>Let's Automate What Happens Next.</h2>
-            <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto">I'll map out where AI automation can save your team time and improve lead handling.</p>
-            <a href="mailto:vermora.automation@outlook.com?subject=AI%20Automation%20Workflow%20Audit&body=Hi%20Khaled%2C%0A%0AI'd%20like%20to%20request%20a%20free%20workflow%20audit.%0A%0ACompany%3A%0AWebsite%3A%0AWhat%20process%20would%20you%20like%20to%20improve%3F%0A%0ABest%2C%0A%5BYour%20Name%5D" class="inline-flex items-center justify-center px-10 py-5 btn-primary text-white font-bold rounded-full text-lg tracking-wide">
-                Get a Free Workflow Audit
-            </a>
-            <div class="mt-12 flex items-center justify-center gap-6 text-sm font-medium text-slate-400">
-                <a href="mailto:vermora.automation@outlook.com" class="flex items-center gap-2 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    vermora.automation@outlook.com
-                </a>
-                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
-                <a href="https://github.com/KhaledOtoom" target="_blank" class="flex items-center gap-2 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
-                    GitHub
-                </a>
-            </div>
-        </div>
+    <section class="section demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="demo-grid wrap">
+        <div class="demo-copy reveal"><span class="eyebrow">Real estate example</span><h2 id="demo-title">A property enquiry gets a useful next step.</h2><p>Here is an illustrative conversation showing how a lead could be understood and routed. The questions, property details and appointment rules are configured for each business.</p><div class="demo-points"><div class="demo-point"><span class="check" aria-hidden="true">✓</span><span>Ask about area, budget, property type and timing.</span></div><div class="demo-point"><span class="check" aria-hidden="true">✓</span><span>Answer only from the approved property and FAQ information.</span></div><div class="demo-point"><span class="check" aria-hidden="true">✓</span><span>Offer a viewing or pass the conversation to an agent.</span></div></div><p class="muted" style="font-size:12px;margin-top:20px">The example below is a product illustration, not a client conversation or result.</p></div>
+        <div class="reveal"><div class="chat-card" aria-label="Illustrative AI and property buyer conversation"><div class="chat-head"><div class="chat-agent"><span class="agent-avatar" aria-hidden="true">V</span><div><strong>Property enquiry assistant</strong><small>Example conversation</small></div></div><span class="demo-badge">Illustrative demo</span></div><div class="chat-body"><div class="chat-time">Today · 10:42 AM</div><div class="bubble lead">Hi, I'm looking for a two-bedroom apartment in West Amman. Ideally next month.</div><div class="bubble ai">Thanks for sharing that. Do you have a budget range, and would you prefer to buy or rent?</div><div class="bubble lead">Rent, around 700–900 JOD per month.</div><div class="bubble ai">Got it: two bedrooms in West Amman, rental budget of 700–900 JOD, with a move next month. Would you like me to help arrange a viewing with the team?</div><div class="bubble lead">Yes, please.</div></div><div class="chat-footer"><strong>Next step:</strong> Share availability · Log context · Notify an agent</div></div><div class="demo-disclaimer">Illustrative example. No real enquiry or outcome shown.</div></div>
+      </div>
     </section>
-
-    <footer class="py-8 bg-black text-center text-slate-600 text-sm border-t border-white/5 relative z-10">
-        <p>&copy; 2026 Khaled Otoom. All rights reserved.</p>
-    </footer>
-
-    <script>
-        // Smooth intersection observer for premium fade-in effects
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            });
-
-            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        });
-    </script>
+    <section class="section" aria-labelledby="reliability-title">
+      <div class="wrap"><div class="section-heading reveal"><span class="eyebrow">Designed for dependable handoffs</span><h2 id="reliability-title">Keep the process visible when something needs attention.</h2><p>A good automation makes routine work easier and gives people a clear path when a message cannot safely be handled on its own.</p></div>
+        <div class="reliability-grid"><article class="reliability reveal"><div class="reliability-icon" aria-hidden="true">⛨</div><h3>Clean lead records</h3><p>Validate key details and check for repeat submissions before starting another conversation.</p></article><article class="reliability reveal"><div class="reliability-icon" aria-hidden="true">↻</div><h3>Recoverable delivery</h3><p>Use controlled retries and logging for supported message and system connections.</p></article><article class="reliability reveal"><div class="reliability-icon" aria-hidden="true">⇧</div><h3>Human handoff</h3><p>Route uncertain requests to your team with the conversation context they need.</p></article><article class="reliability reveal"><div class="reliability-icon" aria-hidden="true">⏸</div><h3>Opt-out respected</h3><p>Support opt-out handling and stop automated follow-up when a person takes over.</p></article><article class="reliability reveal"><div class="reliability-icon" aria-hidden="true">⌁</div><h3>Connected to your tools</h3><p>Plan CRM, calendar and messaging connections around the systems you already use.</p></article><article class="reliability reveal"><div class="reliability-icon" aria-hidden="true">▤</div><h3>Operational visibility</h3><p>Make errors and follow-up tasks visible so your process does not fail silently.</p></article></div>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="process-title">
+      <div class="wrap"><div class="section-heading reveal"><span class="eyebrow">A clear path to launch</span><h2 id="process-title">Built with your team, one step at a time.</h2><p>We start from the way enquiries are handled today and shape a practical system around it.</p></div>
+        <div class="process-grid"><article class="process-card reveal"><span class="num">01</span><h3>Discover</h3><p>Map lead sources, current workflow, edge cases and the outcome you need.</p></article><article class="process-card reveal"><span class="num">02</span><h3>Design</h3><p>Agree qualification, approved answers, booking rules and escalation paths.</p></article><article class="process-card reveal"><span class="num">03</span><h3>Build</h3><p>Connect the agreed channels, calendar and CRM where supported.</p></article><article class="process-card reveal"><span class="num">04</span><h3>Test & launch</h3><p>Review realistic scenarios with your team before going live.</p></article><article class="process-card reveal"><span class="num">05</span><h3>Improve</h3><p>Use team feedback and operational signals to refine the flow.</p></article></div>
+      </div>
+    </section>
+    <section class="section" id="faq" aria-labelledby="faq-title">
+      <div class="faq-layout wrap"><div class="faq-intro reveal"><span class="eyebrow">FAQ</span><h2 id="faq-title">Good questions, clear answers.</h2><p>Every implementation begins by checking the fit with your current process and tools.</p></div><div class="faq-list reveal">
+        <details><summary>What can the system integrate with?</summary><p>Potential connections include your website forms or chat, messaging channels, CRM and calendar. The exact setup depends on the tools you use, their available connection options and the workflow we agree together.</p></details>
+        <details><summary>Do we need to change our CRM?</summary><p>Usually the goal is to work with your existing CRM where a suitable integration is available. We review your current setup before recommending any changes.</p></details>
+        <details><summary>Can it handle Arabic and English?</summary><p>The planned conversation experience supports Arabic and English. We confirm channel behavior, tone, dialect preferences and testing requirements during discovery.</p></details>
+        <details><summary>How long does setup take?</summary><p>Timing depends on the number of lead sources, integrations, approval steps and edge cases. After reviewing your workflow, we can define a practical scope and timeline.</p></details>
+        <details><summary>Can a person take over at any time?</summary><p>Yes. Human handoff and takeover are part of the design. We agree when the system should pause, who receives the conversation and what context they need.</p></details>
+        <details><summary>How do you approach data and privacy?</summary><p>We map what information is needed, where it should go and who needs access as part of scoping. Data handling depends on the channels and services selected; no security certification or legal compliance claim is implied here.</p></details>
+        <details><summary>Can the questions and booking process be customized?</summary><p>Yes. Qualification fields, approved FAQs, working hours, appointment types, handoff rules and follow-up timing can be planned around your business.</p></details>
+      </div></div>
+    </section>
+    <section class="final-cta" id="contact" aria-labelledby="cta-title"><div class="wrap reveal"><span class="eyebrow">Start with your current process</span><h2 id="cta-title">See what your lead-to-booking system could look like.</h2><p>Tell us where leads arrive, what your team needs to know, and what a useful next step looks like.</p><a class="button button-primary" href="mailto:vermora.automation@outlook.com?subject=See%20My%20Lead-to-Booking%20System">Book a demo <span class="button-arrow" aria-hidden="true">↗</span></a></div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner wrap"><a class="footer-brand" href="#top"><span class="brand-mark" aria-hidden="true">V</span> Vermora <span class="muted">· Khaled Otoom</span></a><div class="footer-links"><a href="#how-it-works">How it works</a><a href="#industries">Industries</a><a href="#demo">Demo</a><a href="#faq">FAQ</a><a href="https://github.com/KhaledOtoom" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="mailto:vermora.automation@outlook.com">Email</a></div><p class="footer-copy">© 2026 Vermora</p></div></footer>
+  <script>
+    document.documentElement.classList.add('js-motion');
+    const menuButton=document.querySelector('.menu-toggle');
+    const menu=document.querySelector('#nav-links');
+    menuButton.addEventListener('click',()=>{const isOpen=menuButton.getAttribute('aria-expanded')==='true';menuButton.setAttribute('aria-expanded',String(!isOpen));menuButton.setAttribute('aria-label',isOpen?'Open navigation':'Close navigation');menu.classList.toggle('open',!isOpen)});
+    menu.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{menu.classList.remove('open');menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open navigation')}));
+    if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(element=>observer.observe(element))}else{document.querySelectorAll('.reveal').forEach(element=>element.classList.add('is-visible'))}
+  </script>
 </body>
 </html>
